@@ -9,6 +9,7 @@ class PagePartsExtension < Radiant::Extension
     PagePart.send(:include, PageParts::PagePartExtensions)
     Page.send(:include, PageParts::PageExtensions, PageParts::PagePartTags)
     Admin::ResourceController.prepend_view_path 'app/views'
+    Admin::PagesController.helper PageParts::PagePartHelper
 
     paths = [Rails, *Radiant::Extension.descendants].map do |ext|
       ext.root.to_s + '/app/models'
