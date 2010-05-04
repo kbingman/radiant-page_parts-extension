@@ -10,19 +10,7 @@ class PagePartsExtension < Radiant::Extension
     Page.send(:include, PageParts::PageExtensions, PageParts::PagePartTags)
     Admin::ResourceController.prepend_view_path 'app/views'
     Admin::PagesController.helper PageParts::PagePartHelper
-
-    paths = [Rails, *Radiant::Extension.descendants].map do |ext|
-      ext.root.to_s + '/app/models'
-    end
-    paths.each do |path|
-      Dir["#{path}/*_page_part.rb"].each do |page_part|
-        if page_part =~ %r{/([^/]+)\.rb}
-          require_dependency page_part
-          ActiveSupport::Dependencies.explicitly_unloadable_constants << $1.camelize
-        end
-      end
-    end
-
+    ActiveSupport::Dependencies.load_paths << File.join(Rails.root, %w(app models))
     require 'page_parts/standard_tags'
   end
 

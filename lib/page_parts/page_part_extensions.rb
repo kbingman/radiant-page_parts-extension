@@ -69,6 +69,27 @@ module PageParts
           @show_filters = true unless instance_variable_defined? :@show_filters
           show.nil? ? @show_filters : @show_filters = show
         end
+
+        def descendants
+          load_descendants
+          super
+        end
+
+        private
+
+        def load_descendants
+          unless @_descendants_loaded
+            paths = [Rails, *Radiant::Extension.descendants].map do |ext|
+              ext.root.to_s + '/app/models'
+            end
+            paths.each do |path|
+              Dir["#{path}/*_page_part.rb"].each do |page_part|
+                $1.camelize.constantize if page_part =~ %r{/([^/]+)\.rb}
+              end
+            end
+            @_descendants_loaded = true
+          end
+        end
       end
     end
 
