@@ -104,7 +104,10 @@ module PageParts
 
     def attributes=(attributes)
       attributes.stringify_keys!
-      attributes.delete('content') if attributes['content'].blank? && (!content_column.eql?(:content) ^ content_column.nil?)
+      # passing a blank content attr tends to override the expected behavior
+      # for subclasses. in cases where the content column is *explicitly* set,
+      # remove the content attr if it is blank.
+      attributes.delete('content') if attributes['content'].blank? && content_column && content_column != :content
       super
     end
 
