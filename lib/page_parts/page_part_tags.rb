@@ -149,7 +149,7 @@ module PageParts
           if part = page.part(time_attr)
             part.content
           else
-            raise TagError, "Invalid value for 'for' attribute."
+            raise StandardTags::TagError, "Invalid value for 'for' attribute."
           end
         end
       else
