@@ -6,7 +6,7 @@ module PageParts::ControllerExtensions
       end
       def model_class_with_page_parts
         @model_class ||= begin
-          if params[:page_part][:page_part_type] && (klass = params[:page_part][:page_part_type].constantize) <= model_class_without_page_parts
+          if params[:page_part][:page_part_type] && (klass = params[:page_part].delete(:page_part_type).constantize) <= model_class_without_page_parts
             klass
           else
             model_class_without_page_parts
