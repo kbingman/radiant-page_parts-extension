@@ -11,6 +11,23 @@ describe PagePart do
     part.content.should eql('sweet harmonious biscuits')
   end
 
+  describe ".new" do
+    it "should cast instance to subclass if type is given" do
+      part = PagePart.new(:page_part_type => 'BooleanPagePart')
+      part.class.should be(BooleanPagePart)
+    end
+
+    it "should use parent class if type is omitted" do
+      part = PagePart.new
+      part.class.should be(PagePart)
+    end
+
+    it "should use parent class if type is a mismatch" do
+      part = PagePart.new(:page_part_type => 'Page')
+      part.class.should be(PagePart)
+    end
+  end
+
   describe ".content" do
     # Reset default for next test
     after do

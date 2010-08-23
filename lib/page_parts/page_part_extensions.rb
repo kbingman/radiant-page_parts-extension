@@ -11,6 +11,19 @@ module PageParts
       end
 
       class << base
+        # attributes hash can include :page_part_type => 'PagePartDescendentName'.
+        # Returned object will be an instance of this class. If passed class is
+        # _not_ a PagePart or PagePart descendant, returned object will be a normal
+        # PagePart. If class name is not a valid constant, throws an exception.
+        def new(attributes={})
+          attributes.stringify_keys!
+          if klass_name = attributes.delete('page_part_type') and (klass = klass_name.constantize) < PagePart
+            klass.new(attributes)
+          else
+            super
+          end
+        end
+
         # For front-end transparency, @subclassed_page_part.becomes(PagePart)
         # will cast up to the base class and translate any native content to
         # a string using the render_content method.
