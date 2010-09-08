@@ -18,7 +18,7 @@ module PageParts
         def new(attributes={})
           attributes.stringify_keys!
           if klass_name = attributes.delete('page_part_type') and (klass = klass_name.constantize) < PagePart
-            klass.new(attributes)
+            klass.scoped(:conditions => scope(:create)).new(attributes)
           else
             super
           end
@@ -31,6 +31,7 @@ module PageParts
           subclass.part_name = subclass.name.to_name('Page Part')
           subclass.show_filters self.show_filters
           subclass.class_eval do
+            named_scope(:scoped, lambda { |scope| scope }) unless scopes[:scoped] # not inherited in Rails 2.3.x
             def becomes(superclass)
               object = super
               object.content = render_content if object.respond_to?(:content=)

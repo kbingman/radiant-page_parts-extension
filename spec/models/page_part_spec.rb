@@ -26,6 +26,12 @@ describe PagePart do
       part = PagePart.new(:page_part_type => 'Page')
       part.class.should be(PagePart)
     end
+
+    it "should use scope from base class" do
+      page = Page.create! :title => 'Page', :slug => 'page', :breadcrumb => 'page'
+      part = page.parts.create :name => 'part', :page_part_type => 'StringPagePart'
+      part.page.should eql(page)
+    end
   end
 
   describe ".content" do
