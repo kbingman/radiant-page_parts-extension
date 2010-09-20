@@ -105,10 +105,11 @@ module PageParts
 
     def attributes=(attributes)
       attributes.stringify_keys!
-      # passing a blank content attr tends to override the expected behavior
-      # for subclasses. in cases where the content column is *explicitly* set,
-      # remove the content attr if it is blank.
-      attributes.delete('content') if attributes['content'].blank? && content_column && content_column != :content
+      # This fixes an issue where an extra content key could
+      # override an explicitly named storage column:
+      # @string_part.attributes = { :string_content => "Something", :content => nil } #=> @string_part.content = nil
+      # Don't change it, even (or especially) if you think you're clarifying the logic.
+      attributes.delete('content') if attributes['content'].blank? && (attributes.has_key?(content_column) ^ content_column.eql?(:content))
       super
     end
 

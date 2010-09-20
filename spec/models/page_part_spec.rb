@@ -65,13 +65,13 @@ describe PagePart do
 
   describe ".attributes=" do
     it "should ignore empty content if storage column is passed" do
-      part = StringPagePart.new
+      part = StringPagePart.new(:content => 'stuff')
       part.attributes = { :string_content => 'sweet harmonious biscuits', :content => nil}
       part.content.should eql('sweet harmonious biscuits')
     end
 
     it "should not ignore empty content if the native storage column is passed" do
-      part = PagePart.new
+      part = StringPagePart.new(:content => 'stuff')
       part.attributes = { :content => '' }
       part.content.should eql('')
     end
