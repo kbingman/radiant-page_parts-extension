@@ -3,11 +3,14 @@ module PageParts
     def self.included(base)
       base.class_eval do
         # Recast everything to base class so it's all transparent to the parser
-        def parse_object_with_page_part_subclasses(object)
+        def parse_object(object)
           object = object.becomes(PagePart) if object.class < PagePart
-          parse_object_without_page_part_subclasses(object)
+          text = object.content || ''
+          text = parse(text)
+          text = object.filter.filter(text) if object.respond_to? :filter_id
+          text
         end
-        alias_method_chain :parse_object, :page_part_subclasses
+        # alias_method_chain :parse_object, :page_part_subclasses
       end
     end
   end

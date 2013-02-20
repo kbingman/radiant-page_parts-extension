@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "radiant-page_parts-extension/version"
+require "radiant-page_parts-extension"
 
 Gem::Specification.new do |s|
   s.name        = "radiant-page_parts-extension"
